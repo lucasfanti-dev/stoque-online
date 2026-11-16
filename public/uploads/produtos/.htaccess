@@ -1,0 +1,9 @@
+# Somente imagens: nada aqui dentro pode ser executado
+php_flag engine off
+AddType text/plain .php .phtml .php5 .php7 .phar .cgi .pl
+<FilesMatch "\.(php|phtml|php5|php7|phar|cgi|pl|sh)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+</FilesMatch>
+Options -Indexes -ExecCGI

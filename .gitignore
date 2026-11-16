@@ -1,0 +1,13 @@
+# Ambiente e credenciais
+.env
+.env.producao
+.env.bkp
+
+# Gerados em execução
+storage/
+*.log
+*.sql
+
+# Dependências
+vendor/
+node_modules/

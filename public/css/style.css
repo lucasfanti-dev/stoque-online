@@ -1,0 +1,1262 @@
+/* =====================================================================
+   StoqueOnline v2 — Sistema visual
+   =====================================================================
+   Tema escuro como padrão e tema claro por alternância, ambos definidos
+   por tokens. O Bootstrap continua por baixo: as variáveis dele são
+   reapontadas para os tokens daqui, então componentes prontos (tabelas,
+   modais, formulários) acompanham o tema sem precisar de marcação nova.
+   ===================================================================== */
+
+:root,
+[data-theme="dark"] {
+    --font-main: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-display: 'Space Grotesk', var(--font-main);
+    --font-code: 'Fira Code', 'SF Mono', Consolas, monospace;
+
+    /* Superfícies */
+    --bg-page: #080c14;
+    --bg-surface: #0e1524;
+    --bg-surface-2: #131c2e;
+    --bg-sunken: #050810;
+    --bg-nav: rgba(8, 12, 20, .92);
+
+    /* Traços */
+    --border-card: rgba(99, 102, 241, .22);
+    --border-subtle: rgba(255, 255, 255, .08);
+    --border-strong: rgba(255, 255, 255, .16);
+
+    /* Texto */
+    --text-main: #f8fafc;
+    --text-muted: #94a3b8;
+    --text-faint: #64748b;
+
+    /* Acentos */
+    --accent: #6366f1;
+    --accent-hover: #818cf8;
+    --accent-glow: rgba(99, 102, 241, .35);
+    --accent-soft: rgba(99, 102, 241, .14);
+    /* O mesmo indigo nao serve para as duas funcoes: como texto sobre
+       superficie escura ele fica em 4.1:1, e como fundo de botao com letra
+       branca fica em 4.5:1 raspando. Separar as duas funcoes resolve os dois
+       lados sem mexer nas bordas e brilhos, que seguem usando --accent. */
+    --accent-text: #818cf8;
+    --amber-solid: #f59e0b;
+    --accent-solid: #4f46e5;
+    --red-solid: #dc2626;
+    --green-solid: #047857;
+
+    --cyan: #06b6d4;
+    --green: #10b981;
+    --green-soft: rgba(16, 185, 129, .14);
+    --amber: #f59e0b;
+    --amber-soft: rgba(245, 158, 11, .14);
+    --red: #f87171;
+    --red-soft: rgba(239, 68, 68, .14);
+
+    --shadow-card: 0 1px 2px rgba(0, 0, 0, .3), 0 8px 24px rgba(0, 0, 0, .28);
+    --shadow-raised: 0 12px 40px rgba(0, 0, 0, .45);
+    --capa-fundo: rgba(8, 12, 20, .82);
+    --radius: 14px;
+    --radius-sm: 9px;
+
+    color-scheme: dark;
+}
+
+[data-theme="light"] {
+    --bg-page: #f6f8fb;
+    --bg-surface: #ffffff;
+    --bg-surface-2: #f1f5f9;
+    --bg-sunken: #eef2f7;
+    --bg-nav: rgba(255, 255, 255, .92);
+
+    --border-card: rgba(79, 70, 229, .18);
+    --border-subtle: rgba(15, 23, 42, .10);
+    --border-strong: rgba(15, 23, 42, .18);
+
+    --text-main: #0f172a;
+    --text-muted: #475569;
+    --text-faint: #94a3b8;
+
+    --accent: #4f46e5;
+    --accent-hover: #4338ca;
+    --accent-glow: rgba(79, 70, 229, .18);
+    --accent-soft: rgba(79, 70, 229, .09);
+    --accent-text: #4f46e5;
+    --amber-solid: #f59e0b;
+    --accent-solid: #4f46e5;
+    --red-solid: #dc2626;
+    --green-solid: #047857;
+
+    --cyan: #0e7490;
+    --green: #065f46;
+    --green-soft: rgba(5, 150, 105, .10);
+    --amber: #92400e;
+    --amber-soft: rgba(217, 119, 6, .12);
+    --red: #b91c1c;
+    --red-soft: rgba(220, 38, 38, .10);
+
+    --shadow-card: 0 1px 2px rgba(15, 23, 42, .04), 0 6px 20px rgba(15, 23, 42, .06);
+    --shadow-raised: 0 16px 44px rgba(15, 23, 42, .14);
+    --capa-fundo: rgba(246, 248, 251, .86);
+
+    color-scheme: light;
+}
+
+/* ---------------------------------------------------------------------
+   Ponte com o Bootstrap
+   Reaponta as variáveis do framework para os tokens acima.
+   --------------------------------------------------------------------- */
+:root {
+    --bs-body-bg: var(--bg-page);
+    --bs-body-color: var(--text-main);
+    --bs-body-font-family: var(--font-main);
+    --bs-emphasis-color: var(--text-main);
+    --bs-secondary-color: var(--text-muted);
+    --bs-tertiary-color: var(--text-faint);
+    --bs-border-color: var(--border-subtle);
+    --bs-border-color-translucent: var(--border-subtle);
+
+    --bs-primary: var(--accent);
+    --bs-primary-rgb: 79, 70, 229;
+    --bs-link-color: var(--accent-text);
+    --bs-link-hover-color: var(--accent-hover);
+
+    --bs-card-bg: var(--bg-surface);
+    --bs-card-border-color: var(--border-subtle);
+    --bs-modal-bg: var(--bg-surface);
+    --bs-modal-border-color: var(--border-card);
+    --bs-dropdown-bg: var(--bg-surface);
+    --bs-dropdown-border-color: var(--border-card);
+    --bs-dropdown-link-color: var(--text-main);
+    --bs-dropdown-link-hover-bg: var(--accent-soft);
+    --bs-dropdown-link-hover-color: var(--text-main);
+
+    --bs-table-bg: transparent;
+    --bs-table-color: var(--text-main);
+    --bs-table-border-color: var(--border-subtle);
+    --bs-table-hover-bg: var(--accent-soft);
+    --bs-table-hover-color: var(--text-main);
+
+    --bs-border-radius: var(--radius-sm);
+    --bs-border-radius-lg: var(--radius);
+    --bs-border-radius-xl: var(--radius);
+}
+
+[data-theme="light"] {
+    --bs-primary-rgb: 79, 70, 229;
+}
+
+/* ---------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------- */
+/* A troca de tema é instantânea de propósito.
+   Animar cor em todos os elementos (uma tabela de 50 linhas passa de 300)
+   deixa a troca arrastada e pode travar no meio. A transição fica só onde
+   o movimento tem função: resposta ao ponteiro e ao foco. */
+a,
+.btn,
+.nav-link,
+.card,
+.chip-model,
+.quick-brand,
+.foto-resultado,
+.dropdown-item,
+.page-link,
+.theme-toggle,
+.form-control,
+.form-select {
+    transition: background-color .15s ease, border-color .15s ease,
+                color .15s ease, box-shadow .15s ease, transform .15s ease;
+}
+
+body {
+    font-family: var(--font-main);
+    background-color: var(--bg-page);
+    color: var(--text-main);
+    font-size: .94rem;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3, h4, h5, h6, .navbar-brand {
+    font-family: var(--font-display);
+    letter-spacing: -.4px;
+    color: var(--text-main);
+}
+
+h1 { font-weight: 800; }
+h2, h3 { font-weight: 700; }
+
+a { color: var(--accent-text); text-decoration: none; }
+a:hover { color: var(--accent-hover); }
+
+code, kbd, samp, .font-monospace { font-family: var(--font-code); }
+
+code {
+    color: var(--accent-text);
+    background: var(--accent-soft);
+    padding: .1em .35em;
+    border-radius: 5px;
+    font-size: .88em;
+}
+
+a > code { color: inherit; }
+
+::selection { background: var(--accent); color: #fff; }
+
+/* Barra de rolagem alinhada ao tema */
+::-webkit-scrollbar { width: 11px; height: 11px; }
+::-webkit-scrollbar-track { background: var(--bg-sunken); }
+::-webkit-scrollbar-thumb {
+    background: var(--border-strong);
+    border-radius: 6px;
+    border: 3px solid var(--bg-sunken);
+}
+::-webkit-scrollbar-thumb:hover { background: var(--text-faint); }
+
+/* ---------------------------------------------------------------------
+   Utilitárias do Bootstrap que fixavam claro
+   As telas já escritas usam bg-white/bg-light/text-dark; aqui elas
+   passam a seguir o tema em vez de forçar branco.
+   --------------------------------------------------------------------- */
+.bg-white       { background-color: var(--bg-surface) !important; }
+.bg-light       { background-color: var(--bg-surface-2) !important; }
+.bg-body        { background-color: var(--bg-page) !important; }
+.bg-dark        { background-color: var(--bg-surface) !important; }
+.text-dark      { color: var(--text-main) !important; }
+.text-muted     { color: var(--text-muted) !important; }
+.text-white-50  { color: var(--text-muted) !important; }
+.text-white     { color: var(--text-main) !important; }
+.border         { border-color: var(--border-subtle) !important; }
+.border-top,
+.border-bottom,
+.border-start,
+.border-end     { border-color: var(--border-subtle) !important; }
+.border-secondary { border-color: var(--border-subtle) !important; }
+
+.table-light,
+.table-light > th,
+.table-light > td {
+    background-color: var(--bg-surface-2) !important;
+    color: var(--text-muted) !important;
+    border-color: var(--border-subtle) !important;
+}
+
+/* Tonalidades suaves usadas nos selos */
+.bg-primary-subtle   { background-color: var(--accent-soft) !important; }
+.bg-success-subtle   { background-color: var(--green-soft) !important; }
+.bg-warning-subtle   { background-color: var(--amber-soft) !important; }
+.bg-danger-subtle    { background-color: var(--red-soft) !important; }
+.bg-info-subtle      { background-color: var(--accent-soft) !important; }
+.bg-secondary-subtle { background-color: var(--bg-surface-2) !important; }
+
+.text-primary { color: var(--accent-text) !important; }
+.text-success { color: var(--green) !important; }
+.text-warning { color: var(--amber) !important; }
+.text-danger  { color: var(--red) !important; }
+.text-info    { color: var(--cyan) !important; }
+.text-secondary { color: var(--text-muted) !important; }
+
+/* ---------------------------------------------------------------------
+   Blocos de cor chapada
+   text-white / text-white-50 apontam para os tokens de texto para
+   acompanharem o tema; sobre indigo, verde ou vermelho solido isso
+   inverteria a leitura. Aqui os tokens voltam a ser brancos so dentro
+   do bloco colorido.
+   --------------------------------------------------------------------- */
+.bg-primary,
+.bg-success,
+.bg-danger,
+.bg-info {
+    --text-main: #ffffff;
+    --text-muted: rgba(255, 255, 255, .85);
+    --text-faint: rgba(255, 255, 255, .7);
+    color: #fff;
+}
+
+/* ---------------------------------------------------------------------
+   Cabeçalho e navegação
+   --------------------------------------------------------------------- */
+/* A fonte monoespacada fica reservada para codigo de peca, onde alinhar
+   digito embaixo de digito ajuda a ler. Telefone e e-mail sao texto comum. */
+.topbar {
+    background: var(--bg-sunken) !important;
+    border-bottom: 1px solid var(--border-subtle);
+    font-family: var(--font-main);
+    font-size: .78rem;
+    color: var(--text-muted) !important;
+}
+
+.topbar-link {
+    color: var(--text-muted) !important;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    max-width: 100%;
+}
+
+.topbar-link:hover { color: var(--text-main) !important; }
+
+/* Cabecalho de secao dentro do menu da conta */
+.dropdown-header-admin {
+    font-size: .68rem;
+    letter-spacing: .09em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--accent-text) !important;
+    padding-top: .55rem;
+}
+
+.navbar {
+    background: var(--bg-nav) !important;
+    backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--border-subtle);
+    box-shadow: none !important;
+}
+
+.navbar .nav-link {
+    color: var(--text-muted) !important;
+    font-weight: 500;
+    font-size: .88rem;
+    border-radius: var(--radius-sm);
+    padding: .45rem .8rem !important;
+}
+
+.navbar .nav-link:hover,
+.navbar .nav-link.active {
+    color: var(--text-main) !important;
+    background: var(--accent-soft);
+}
+
+.navbar-brand {
+    font-weight: 800;
+    font-size: 1.12rem;
+    color: var(--text-main) !important;
+}
+
+.logo-badge {
+    width: 32px;
+    height: 32px;
+    display: grid;
+    place-items: center;
+    border-radius: 9px;
+    background: linear-gradient(135deg, var(--accent), var(--cyan));
+    color: #fff;
+}
+
+.navbar-toggler {
+    border-color: var(--border-subtle) !important;
+    color: var(--text-main);
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 30 30'%3e%3cpath stroke='rgba(148,163,184,1)' stroke-linecap='round' stroke-miterlimit='10' stroke-width='2' d='M4 7h22M4 15h22M4 23h22'/%3e%3c/svg%3e");
+}
+
+/* Alternador de tema */
+.theme-toggle {
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    padding: .4rem .75rem;
+    border-radius: var(--radius-sm);
+    font-size: .8rem;
+    font-weight: 600;
+    display: inline-flex;
+    align-items: center;
+    gap: .45rem;
+    cursor: pointer;
+    line-height: 1;
+}
+
+.theme-toggle:hover {
+    border-color: var(--accent);
+    color: var(--accent-text);
+}
+
+/* ---------------------------------------------------------------------
+   Cartões e superfícies
+   --------------------------------------------------------------------- */
+.card {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-subtle) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow-card) !important;
+}
+
+.card-header,
+.card-footer {
+    background: transparent !important;
+    border-color: var(--border-subtle) !important;
+    color: var(--text-main);
+}
+
+.shadow-sm { box-shadow: var(--shadow-card) !important; }
+.shadow,
+.shadow-lg { box-shadow: var(--shadow-raised) !important; }
+
+.rounded-4 { border-radius: var(--radius) !important; }
+.rounded-3 { border-radius: var(--radius-sm) !important; }
+
+hr { border-color: var(--border-subtle); opacity: 1; }
+
+/* ---------------------------------------------------------------------
+   Tabelas
+   --------------------------------------------------------------------- */
+.table {
+    color: var(--text-main);
+    border-color: var(--border-subtle);
+    margin-bottom: 0;
+}
+
+.table > thead th {
+    font-family: var(--font-code);
+    font-size: .68rem;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+    font-weight: 600;
+    color: var(--text-muted) !important;
+    background: var(--bg-surface-2) !important;
+    border-bottom: 1px solid var(--border-subtle) !important;
+    padding: .85rem .75rem;
+    white-space: nowrap;
+}
+
+.table > tbody > tr { border-color: var(--border-subtle); }
+
+.table > tbody > tr:hover > * {
+    background-color: var(--accent-soft) !important;
+    color: var(--text-main);
+}
+
+.table > :not(caption) > * > * {
+    background-color: transparent;
+    border-bottom-color: var(--border-subtle);
+    padding: .8rem .75rem;
+}
+
+/* Códigos de peça em fonte técnica, como num catálogo */
+.table .fw-bold.text-primary,
+.codigo-peca {
+    font-family: var(--font-code);
+    font-size: .88rem;
+    letter-spacing: -.2px;
+}
+
+/* ---------------------------------------------------------------------
+   Formulários
+   --------------------------------------------------------------------- */
+.form-control,
+.form-select {
+    background-color: var(--bg-surface-2);
+    border: 1px solid var(--border-subtle);
+    color: var(--text-main);
+    border-radius: var(--radius-sm);
+    font-size: .9rem;
+    padding: .55rem .8rem;
+}
+
+.form-control:focus,
+.form-select:focus {
+    background-color: var(--bg-surface-2);
+    border-color: var(--accent);
+    color: var(--text-main);
+    box-shadow: 0 0 0 3px var(--accent-glow);
+}
+
+.form-control::placeholder { color: var(--text-faint); }
+
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: var(--bg-sunken);
+    color: var(--text-muted);
+}
+
+.form-label {
+    font-size: .78rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    margin-bottom: .35rem;
+}
+
+.form-text { color: var(--text-muted) !important; }
+
+.input-group-text {
+    background: var(--bg-sunken);
+    border-color: var(--border-subtle);
+    color: var(--text-faint);
+}
+
+.form-check-input {
+    background-color: var(--bg-surface-2);
+    border-color: var(--border-strong);
+}
+
+.form-check-input:checked {
+    background-color: var(--accent);
+    border-color: var(--accent);
+}
+
+/* ---------------------------------------------------------------------
+   Botões
+   --------------------------------------------------------------------- */
+.btn {
+    font-weight: 600;
+    font-size: .87rem;
+    border-radius: var(--radius-sm);
+    padding: .5rem .95rem;
+}
+
+.btn-primary {
+    background: var(--accent-solid);
+    border-color: var(--accent-solid);
+    color: #fff;
+    box-shadow: 0 2px 12px var(--accent-glow);
+}
+
+.btn-primary:hover,
+.btn-primary:focus {
+    background: var(--accent-hover);
+    border-color: var(--accent-hover);
+    color: #fff;
+}
+
+.btn-success { background: var(--green-solid); border-color: var(--green-solid); color: #fff; }
+.btn-success:hover { filter: brightness(1.1); color: #fff; }
+.btn-danger  { background: var(--red-solid); border-color: var(--red-solid); color: #fff; }
+.btn-warning { background: var(--amber-solid); border-color: var(--amber-solid); color: #111827; }
+
+.btn-outline-primary   { color: var(--accent-text); border-color: var(--border-card); }
+.btn-outline-primary:hover { background: var(--accent-solid); border-color: var(--accent-solid); color: #fff; }
+.btn-outline-success   { color: var(--green); border-color: var(--green-soft); }
+.btn-outline-success:hover { background: var(--green-solid); border-color: var(--green-solid); color: #fff; }
+.btn-outline-danger    { color: var(--red); border-color: var(--red-soft); }
+.btn-outline-danger:hover { background: var(--red-solid); border-color: var(--red-solid); color: #fff; }
+.btn-outline-warning   { color: var(--amber); border-color: var(--amber-soft); }
+.btn-outline-secondary { color: var(--text-muted); border-color: var(--border-subtle); }
+.btn-outline-secondary:hover { background: var(--bg-surface-2); color: var(--text-main); border-color: var(--border-strong); }
+.btn-outline-light     { color: var(--text-main); border-color: var(--border-strong) !important; }
+.btn-outline-light:hover { background: var(--bg-surface-2); color: var(--text-main); }
+.btn-outline-info      { color: var(--cyan); border-color: var(--border-card); }
+.btn-light             { background: var(--bg-surface-2); border-color: var(--border-subtle); color: var(--text-main); }
+.btn-secondary         { background: var(--bg-surface-2); border-color: var(--border-strong); color: var(--text-main); }
+
+.btn-close {
+    filter: invert(1) grayscale(1) brightness(1.6);
+    opacity: .6;
+}
+
+[data-theme="light"] .btn-close { filter: none; }
+
+/* ---------------------------------------------------------------------
+   Selos
+   --------------------------------------------------------------------- */
+.badge {
+    font-weight: 600;
+    font-size: .72rem;
+    letter-spacing: .01em;
+    padding: .34em .6em;
+    border-radius: 6px;
+}
+
+.badge.bg-secondary { background: var(--bg-surface-2) !important; color: var(--text-muted) !important; }
+.badge.bg-success   { background: var(--green-solid) !important; color: #fff !important; }
+.badge.bg-warning   { background: var(--amber-solid) !important; color: #111827 !important; }
+.badge.bg-danger    { background: var(--red-solid) !important; color: #fff !important; }
+.badge.bg-primary   { background: var(--accent-solid) !important; color: #fff !important; }
+.badge.bg-dark      { background: var(--bg-sunken) !important; color: var(--text-main) !important; }
+
+/* ---------------------------------------------------------------------
+   Avisos
+   --------------------------------------------------------------------- */
+.alert {
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface);
+    color: var(--text-main);
+    border-left-width: 3px;
+    font-size: .88rem;
+}
+
+.alert-success { border-left-color: var(--green); background: var(--green-soft); }
+.alert-danger  { border-left-color: var(--red); background: var(--red-soft); }
+.alert-warning { border-left-color: var(--amber); background: var(--amber-soft); }
+.alert-info    { border-left-color: var(--cyan); background: var(--accent-soft); }
+.alert-secondary { border-left-color: var(--text-faint); background: var(--bg-surface-2); }
+
+.alert .fa-solid,
+.alert .fa-regular { color: inherit; }
+
+/* ---------------------------------------------------------------------
+   Modais e menus
+   --------------------------------------------------------------------- */
+.modal-content {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-card) !important;
+    border-radius: var(--radius) !important;
+    box-shadow: var(--shadow-raised);
+}
+
+.modal-header,
+.modal-footer {
+    border-color: var(--border-subtle) !important;
+    background: transparent !important;
+}
+
+.modal-backdrop.show { opacity: .7; }
+
+.dropdown-menu {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius-sm);
+    box-shadow: var(--shadow-raised);
+    padding: .35rem;
+}
+
+.dropdown-item {
+    color: var(--text-main);
+    border-radius: 6px;
+    font-size: .87rem;
+    padding: .5rem .7rem;
+}
+
+.dropdown-item:hover,
+.dropdown-item:focus {
+    background: var(--accent-soft);
+    color: var(--text-main);
+}
+
+.dropdown-divider { border-color: var(--border-subtle); }
+
+.list-group-item {
+    background: transparent;
+    border-color: var(--border-subtle);
+    color: var(--text-main);
+}
+
+.accordion-item {
+    background: var(--bg-surface);
+    border-color: var(--border-subtle) !important;
+}
+
+.accordion-button {
+    background: var(--bg-surface);
+    color: var(--text-main);
+    font-family: var(--font-display);
+}
+
+.accordion-button:not(.collapsed) {
+    background: var(--accent-soft);
+    color: var(--text-main);
+    box-shadow: none;
+}
+
+.accordion-button::after { filter: invert(.7); }
+[data-theme="light"] .accordion-button::after { filter: none; }
+
+.accordion-body { background: var(--bg-surface); color: var(--text-muted); }
+
+/* ---------------------------------------------------------------------
+   Paginação
+   --------------------------------------------------------------------- */
+.page-link {
+    background: var(--bg-surface-2);
+    border-color: var(--border-subtle);
+    color: var(--text-muted);
+    font-size: .84rem;
+}
+
+.page-link:hover { background: var(--accent-soft); color: var(--text-main); border-color: var(--border-card); }
+
+.page-item.active .page-link {
+    background: var(--accent-solid);
+    border-color: var(--accent-solid);
+    color: #fff;
+}
+
+/* ---------------------------------------------------------------------
+   Rodapé
+   --------------------------------------------------------------------- */
+footer {
+    background: var(--bg-sunken) !important;
+    border-top: 1px solid var(--border-subtle) !important;
+    color: var(--text-muted);
+}
+
+footer h5, footer h6 { color: var(--text-main); }
+/* :not(.btn) porque o rodapé também tem botões: sem isso o cinza de link
+   vencia o branco do .btn-success e o texto sumia sobre o verde. */
+footer a:not(.btn) { color: var(--text-muted) !important; }
+footer a:not(.btn):hover { color: var(--accent-text) !important; }
+.hover-white:hover { color: var(--accent-text) !important; }
+
+/* ---------------------------------------------------------------------
+   Busca de peças
+   --------------------------------------------------------------------- */
+.chip-model {
+    display: inline-flex;
+    align-items: center;
+    gap: .5rem;
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border-card);
+    border-radius: 50rem;
+    padding: .35rem .5rem .35rem .85rem;
+    font-family: var(--font-code);
+    font-size: .8rem;
+    font-weight: 500;
+    color: var(--text-main);
+    cursor: pointer;
+}
+
+.chip-model:hover {
+    border-color: var(--accent);
+    background: var(--accent-soft);
+}
+
+.chip-badge {
+    background: var(--bg-sunken);
+    color: var(--text-muted);
+    border-radius: 50rem;
+    padding: .15rem .55rem;
+    font-size: .7rem;
+}
+
+.quick-brand {
+    font-family: var(--font-code);
+    font-size: .75rem;
+    background: var(--bg-surface-2) !important;
+    border: 1px solid var(--border-subtle) !important;
+    color: var(--text-muted) !important;
+}
+
+.quick-brand:hover,
+.quick-brand.active {
+    border-color: var(--accent) !important;
+    color: var(--accent-text) !important;
+    background: var(--accent-soft) !important;
+}
+
+.filtros-busca {
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+}
+
+/* ---------------------------------------------------------------------
+   Envio de planilha
+   --------------------------------------------------------------------- */
+.upload-dropzone {
+    background: var(--bg-surface-2) !important;
+    border: 2px dashed var(--border-strong) !important;
+    border-radius: var(--radius) !important;
+    transition: all .2s ease;
+}
+
+.upload-dropzone.dragover {
+    border-color: var(--accent) !important;
+    background: var(--accent-soft) !important;
+}
+
+.border-dashed { border-style: dashed !important; }
+
+/* ---------------------------------------------------------------------
+   Fotos das peças
+   --------------------------------------------------------------------- */
+.foto-resultado {
+    width: 52px;
+    height: 52px;
+    object-fit: cover;
+    border-radius: var(--radius-sm);
+    border: 1px solid var(--border-subtle);
+    background: var(--bg-surface-2);
+    cursor: zoom-in;
+    transition: transform .15s ease, box-shadow .15s ease, border-color .15s ease;
+}
+
+.foto-resultado:hover {
+    transform: scale(1.08);
+    border-color: var(--accent);
+    box-shadow: 0 .4rem 1rem rgba(0, 0, 0, .35);
+}
+
+.foto-vazia {
+    width: 52px;
+    height: 52px;
+    border-radius: var(--radius-sm);
+    border: 1px dashed var(--border-strong);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--text-faint);
+    background: var(--bg-surface-2);
+}
+
+/* ---------------------------------------------------------------------
+   Visualizador de fotos com ampliação
+   --------------------------------------------------------------------- */
+body.visualizador-travado { overflow: hidden; }
+
+.visualizador-foto {
+    position: fixed;
+    inset: 0;
+    z-index: 2000;
+    display: none;
+    flex-direction: column;
+    background: rgba(3, 6, 12, .95);
+    backdrop-filter: blur(6px);
+}
+
+.visualizador-foto.aberto { display: flex; }
+
+.visualizador-topo {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: .9rem 1.2rem;
+    color: #f8fafc;
+    flex-shrink: 0;
+}
+
+.visualizador-legenda {
+    font-family: var(--font-code);
+    font-weight: 600;
+    font-size: .92rem;
+    flex-grow: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.visualizador-contador {
+    font-family: var(--font-code);
+    font-size: .8rem;
+    color: rgba(255, 255, 255, .55);
+    flex-shrink: 0;
+}
+
+.visualizador-fechar,
+.visualizador-seta,
+.visualizador-reset {
+    background: rgba(255, 255, 255, .1);
+    border: 1px solid rgba(255, 255, 255, .12);
+    color: #fff;
+    border-radius: 50rem;
+    transition: background .15s ease;
+}
+
+.visualizador-fechar { width: 38px; height: 38px; font-size: 1.05rem; flex-shrink: 0; }
+
+.visualizador-fechar:hover,
+.visualizador-seta:hover,
+.visualizador-reset:hover { background: var(--accent-solid); border-color: var(--accent-solid); }
+
+.visualizador-palco {
+    flex: 1 1 auto;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    min-height: 0;
+    padding: 0 .5rem;
+}
+
+.visualizador-imagem {
+    max-width: 100%;
+    max-height: 100%;
+    object-fit: contain;
+    transform-origin: center center;
+    transition: transform .18s ease-out;
+    cursor: zoom-in;
+    user-select: none;
+    -webkit-user-drag: none;
+    touch-action: none;
+    border-radius: 6px;
+}
+
+.visualizador-imagem.ampliada { cursor: grab; transition: none; }
+.visualizador-imagem.arrastando { cursor: grabbing; }
+
+.visualizador-seta {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 46px;
+    height: 46px;
+    font-size: 1.15rem;
+    z-index: 2;
+}
+
+.visualizador-anterior { left: 1rem; }
+.visualizador-proxima { right: 1rem; }
+
+.visualizador-ajuda {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    padding: .9rem;
+    color: rgba(255, 255, 255, .5);
+    font-family: var(--font-code);
+    font-size: .74rem;
+    flex-shrink: 0;
+}
+
+.visualizador-reset { padding: .3rem .9rem; font-size: .74rem; font-weight: 600; }
+
+/* ---------------------------------------------------------------------
+   Apoio
+   --------------------------------------------------------------------- */
+.text-small { font-size: .84rem; }
+.fs-7 { font-size: .85rem !important; }
+.fs-8 { font-size: .74rem !important; }
+.fw-extrabold { font-weight: 800; }
+.tracking-tight { letter-spacing: -.5px; }
+
+.min-width-0 { min-width: 0; }
+
+.fade-in { animation: aparecer .25s ease both; }
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(4px); }
+    to   { opacity: 1; transform: none; }
+}
+
+/* Marca d'água técnica usada em cabeçalhos de seção */
+.eyebrow {
+    font-family: var(--font-code);
+    font-size: .7rem;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: var(--accent-text);
+    font-weight: 600;
+}
+
+@media (max-width: 768px) {
+    body { font-size: .9rem; }
+    .table > thead th { font-size: .62rem; }
+}
+
+/* ---------------------------------------------------------------------
+   Herói da página inicial
+   O texto aqui é escrito como text-white / text-white-50; essas duas
+   utilitárias já apontam para os tokens de texto, então o herói segue o
+   tema sem precisar de marcação condicional.
+   --------------------------------------------------------------------- */
+.hero-section {
+    background:
+        radial-gradient(900px 420px at 16% -12%, var(--accent-glow), transparent 62%),
+        radial-gradient(760px 380px at 88% 6%, var(--accent-soft), transparent 64%),
+        var(--bg-page);
+    border-bottom: 1px solid var(--border-subtle);
+    overflow: hidden;
+}
+
+/* Caixa de busca elevada sobre o herói */
+.hero-search-box {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-raised);
+}
+
+.hero-search-box .form-control:focus { box-shadow: none !important; }
+
+/* Cartões de número do painel do herói */
+.stat-card-dark {
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border-subtle);
+}
+
+/* Círculo numerado da seção "como funciona" */
+.step-icon {
+    border: 1px solid var(--border-subtle);
+    box-shadow: var(--shadow-card);
+}
+
+/* Rodapé escrito como <footer class="bg-dark">: a classe tem
+   especificidade maior que o seletor de elemento, então precisa vencer aqui. */
+footer.bg-dark { background-color: var(--bg-sunken) !important; }
+
+/* ---------------------------------------------------------------------
+   Utilitárias próprias
+   --------------------------------------------------------------------- */
+.fs-9 { font-size: .55rem; }
+.cursor-pointer { cursor: pointer; }
+.zoom-abrir { cursor: zoom-in; }
+.space-y-2 > * + * { margin-top: .5rem; }
+
+/* ---------------------------------------------------------------------
+   Botão da conta na barra
+   Antes era btn-outline-light: quando o menu abre o Bootstrap aplica o
+   estado ativo, que pinta o fundo de branco e mantém a letra clara — o
+   nome do usuário sumia justamente no momento em que ele clicava.
+   --------------------------------------------------------------------- */
+.conta-toggle {
+    background: var(--bg-surface-2);
+    border: 1px solid var(--border-subtle);
+    border-radius: var(--radius-sm);
+    color: var(--text-main) !important;
+    padding: .4rem .8rem !important;
+    font-weight: 600;
+    font-size: .85rem;
+}
+
+.conta-toggle:hover,
+.conta-toggle.show,
+.conta-toggle[aria-expanded="true"] {
+    background: var(--accent-soft) !important;
+    border-color: var(--accent);
+    color: var(--text-main) !important;
+}
+
+/* ---------------------------------------------------------------------
+   Tabela que vira cartão no celular
+   Uma tabela de seis colunas em tela de 375px só cabe rolando de lado, e
+   quem procura peça pelo telefone ficava sem ver o botão do WhatsApp sem
+   arrastar. Abaixo de 768px cada linha vira um cartão e o cabeçalho da
+   coluna reaparece como rótulo, lido de data-rotulo.
+   --------------------------------------------------------------------- */
+@media (max-width: 767.98px) {
+    .tabela-cartoes thead { display: none; }
+
+    .tabela-cartoes,
+    .tabela-cartoes > tbody,
+    .tabela-cartoes > tbody > tr,
+    .tabela-cartoes > tbody > tr > td {
+        display: block;
+        width: 100%;
+    }
+
+    .tabela-cartoes > tbody > tr {
+        background: var(--bg-surface-2);
+        border: 1px solid var(--border-subtle) !important;
+        border-radius: var(--radius-sm);
+        padding: .8rem .9rem;
+        margin-bottom: .7rem;
+    }
+
+    .tabela-cartoes > tbody > tr > td {
+        border: 0 !important;
+        background: none !important;
+        padding: .28rem 0 !important;
+        text-align: left !important;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        gap: 1rem;
+    }
+
+    .tabela-cartoes > tbody > tr > td::before {
+        content: attr(data-rotulo);
+        font-family: var(--font-code);
+        font-size: .63rem;
+        letter-spacing: .08em;
+        text-transform: uppercase;
+        color: var(--text-muted);
+        flex: 0 0 auto;
+    }
+
+    /* Foto e botões ocupam a linha inteira, sem rótulo na frente */
+    .tabela-cartoes > tbody > tr > td[data-rotulo=""]::before { content: none; }
+    .tabela-cartoes > tbody > tr > td[data-rotulo=""] { justify-content: flex-start; }
+
+    .tabela-cartoes > tbody > tr > td > .d-inline-flex { width: 100%; }
+    .tabela-cartoes > tbody > tr > td > .d-inline-flex > .btn { flex: 1 1 auto; }
+}
+
+/* O botão de modo de busca marcado usava o azul padrão do Bootstrap, que
+   destoa do índigo do sistema. */
+.btn-check:checked + .btn-outline-primary,
+.btn-check:active + .btn-outline-primary,
+.btn-check:checked + .btn-outline-secondary {
+    background: var(--accent-solid) !important;
+    border-color: var(--accent-solid) !important;
+    color: #fff !important;
+}
+
+@media (max-width: 767.98px) {
+    /* No cartão o nome do distribuidor fica em bloco próprio, alinhado ao topo */
+    .tabela-cartoes > tbody > tr > td[data-rotulo="Distribuidor"] { align-items: flex-start; }
+    .tabela-cartoes > tbody > tr > td[data-rotulo="Distribuidor"] > div { text-align: right; }
+}
+
+/* ---------------------------------------------------------------------
+   Barra sem quebra de linha
+   Um rótulo de menu partido ao meio ("Pesquisar / Estoque") não é escolha
+   de layout, é falta de espaço. Aqui o texto nunca quebra; quando não
+   couber, o Bootstrap recolhe tudo no botão sanduíche (expand-xl).
+   --------------------------------------------------------------------- */
+.navbar .nav-link,
+.navbar .btn,
+.navbar .dropdown-item,
+.theme-toggle {
+    white-space: nowrap;
+}
+
+@media (min-width: 1200px) {
+    .navbar .nav-link { padding: .45rem .7rem !important; }
+    .navbar-nav .nav-item + .nav-item { margin-left: .1rem; }
+}
+
+.conta-nome {
+    display: inline-block;
+    vertical-align: middle;
+    max-width: 210px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Faixa apertada: a barra já está aberta (>=1200) mas o espaço é curto.
+   O rótulo do tema sai — o ícone de sol/lua já diz o que o botão faz — e o
+   nome da conta encurta, em vez de a barra inteira estourar o container. */
+@media (min-width: 1200px) and (max-width: 1399.98px) {
+    .theme-toggle #textoTema { display: none; }
+    .theme-toggle { padding: .4rem .55rem; }
+    .navbar .nav-link { padding: .45rem .55rem !important; }
+    .conta-nome { max-width: 130px; }
+}
+
+/* ---------------------------------------------------------------------
+   Rótulo de botão não quebra
+   O Bootstrap 5 deixou o .btn quebrar linha. Espremido numa coluna
+   estreita, "Começa com" virava três linhas e o botão ficava com o triplo
+   da altura do vizinho. O rótulo fica inteiro; quem quebra é a fileira.
+   A exceção é o botão de largura total, onde o texto longo precisa
+   mesmo quebrar em vez de vazar do cartão.
+   --------------------------------------------------------------------- */
+.btn { white-space: nowrap; }
+
+.btn.w-100,
+.d-grid > .btn,
+.btn.text-wrap { white-space: normal; }
+
+@media (max-width: 575.98px) {
+    /* Os tres modos de busca nao cabem lado a lado em 375px: dividir em tres
+       partes iguais nao resolve porque o rotulo nao encolhe. Aqui o grupo
+       vira uma fileira que quebra, com pilulas independentes, e os icones
+       saem - eles custam 25px cada e o rotulo ja diz o que o botao faz. */
+    .btn-group.modo-busca {
+        width: 100%;
+        flex-wrap: wrap;
+        gap: .35rem;
+    }
+    .btn-group.modo-busca > .btn {
+        flex: 1 1 auto;
+        border-radius: var(--radius-sm) !important;
+        margin-left: 0 !important;
+        font-size: .76rem;
+        padding: .4rem .5rem;
+    }
+    .btn-group.modo-busca > .btn i { display: none; }
+}
+
+@media (max-width: 575.98px) {
+    /* As quatro marcas de atalho disputavam a linha com o botao "Filtros" e
+       quebravam em duas fileiras desalinhadas. Agora as marcas ficam numa
+       fileira so e o "Filtros" desce para a linha seguinte, a direita. */
+    .quick-brand {
+        padding: .25rem .45rem !important;
+        font-size: .7rem !important;
+    }
+
+    .filtro-rapido { flex-wrap: wrap; }
+    .filtro-rapido > .d-flex { flex: 1 1 100%; }
+    .filtro-rapido > .btn { margin-left: auto !important; }
+}
+
+@media (max-width: 575.98px) {
+    /* Campo de arquivo ao lado do botão não cabe no celular: o próprio
+       controle do navegador ("Escolher arquivo / Nenhum arquivo") já ocupa
+       a linha toda. Aqui ele fica numa linha e o botão de enviar em outra. */
+    .input-group > input[type="file"].form-control {
+        flex: 1 1 100%;
+        border-radius: var(--radius-sm) !important;
+        margin-bottom: .4rem;
+    }
+
+    .input-group > input[type="file"].form-control ~ .btn {
+        flex: 1 1 100%;
+        border-radius: var(--radius-sm) !important;
+    }
+}
+
+/* ---------------------------------------------------------------------
+   Campo de código de verificação
+   Seis dígitos vindos do e-mail: fonte grande e espaçada para a pessoa
+   conferir dígito a dígito enquanto digita.
+   --------------------------------------------------------------------- */
+.campo-codigo {
+    font-family: var(--font-code);
+    font-size: 1.6rem !important;
+    letter-spacing: .5em;
+    text-align: center;
+    font-weight: 600;
+    padding: .6rem .5rem !important;
+    text-indent: .5em; /* compensa o espaço que o letter-spacing joga à direita */
+}
+
+.campo-codigo::placeholder {
+    letter-spacing: .5em;
+    color: var(--text-faint);
+    font-weight: 400;
+}
+
+/* ---------------------------------------------------------------------
+   Capa de espera
+   Aparece sobre a tela enquanto o servidor entrega o e-mail (3 a 4
+   segundos). Cobre o conteúdo de propósito: além de avisar, impede o
+   segundo clique que criava cadastro ou código duplicado.
+   --------------------------------------------------------------------- */
+.capa-aguarde {
+    position: fixed;
+    inset: 0;
+    z-index: 2100; /* acima dos modais do Bootstrap, que param em 1055 */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    background: var(--capa-fundo);
+    backdrop-filter: blur(3px);
+    animation: capa-entra .18s ease both;
+}
+
+@keyframes capa-entra {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.capa-aguarde-caixa {
+    background: var(--bg-surface);
+    border: 1px solid var(--border-card);
+    border-radius: var(--radius);
+    box-shadow: var(--shadow-raised);
+    padding: 2rem 2.25rem;
+    text-align: center;
+    max-width: 22rem;
+}
+
+.capa-aguarde .spinner-border {
+    color: var(--accent-text);
+    width: 2.4rem;
+    height: 2.4rem;
+    border-width: .22em;
+}
+
+.capa-aguarde-texto {
+    margin-top: 1.1rem;
+    font-weight: 600;
+    color: var(--text-main);
+    line-height: 1.4;
+}
+
+.capa-aguarde-dica {
+    margin-top: .5rem;
+    font-size: .78rem;
+    color: var(--text-muted);
+}
+
+/* Quem pede menos movimento no sistema recebe a capa sem transição */
+@media (prefers-reduced-motion: reduce) {
+    .capa-aguarde { animation: none; }
+}

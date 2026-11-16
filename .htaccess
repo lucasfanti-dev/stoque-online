@@ -1,0 +1,53 @@
+# =====================================================================
+# StoqueOnline v2 - Proteção da raiz da aplicação
+# =====================================================================
+#
+# O ideal em produção é apontar o document root do domínio para a pasta
+# /public. Enquanto isso não for feito, este arquivo cumpre dois papéis:
+# encaminhar as requisições para /public e bloquear o acesso direto a
+# qualquer arquivo sensível que esteja fora dela.
+
+# ---------------------------------------------------------------------
+# 1. Bloqueio de arquivos e pastas que nunca devem ser servidos
+# ---------------------------------------------------------------------
+<FilesMatch "^\.(env|env\..*|git.*|htaccess|htpasswd)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+<FilesMatch "\.(sql|log|md|json|lock|ini|bak|old|sh)$">
+    <IfModule mod_authz_core.c>
+        Require all denied
+    </IfModule>
+    <IfModule !mod_authz_core.c>
+        Order allow,deny
+        Deny from all
+    </IfModule>
+</FilesMatch>
+
+# Nada de listagem de diretórios
+Options -Indexes
+
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # Bloqueia o acesso direto ao código-fonte e aos scripts de banco,
+    # independentemente de o site rodar na raiz ou em um subdiretório.
+    RewriteRule ^(app|config|database|views|storage)(/|$) - [F,L]
+    RewriteRule (^|/)\.(?!well-known) - [F,L]
+
+    # Encaminha o restante para a pasta public/
+    RewriteCond %{REQUEST_URI} !(^|/)public/
+    RewriteRule ^(.*)$ public/$1 [L]
+</IfModule>
+
+# Expõe o mínimo possível sobre o servidor
+<IfModule mod_headers.c>
+    Header unset X-Powered-By
+    Header always set X-Content-Type-Options "nosniff"
+</IfModule>
